@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+
+  <body class="sans-serif w-100 bg-washed-blue">
+
+    <%- include('../partials/header'); %>
+
+    <!-- open main content -->
+    <main class="w-80 black-70 center">
+
+      <section class="vh-100">
+        <header class="tc ph5 lh-copy">
+          <h1 class="f1 f-headline-l mb3 fw9 dib"><%= locals.status %></h1>
+          <h2 class="tc f1-l fw1">Sorry, an error occurred.</h2>
+        </header>
+        <% if (locals.message) { %>
+          <p class="lh-copy f6 link dib dim mr3 mr4-ns"><%= locals.message %></p>
+        <% } %>
+        <% if (locals.error) { %>
+          <p class="lh-copy f6 link dib dim mr3 mr4-ns"><%= locals.error %></p>
+        <% } %>
+      </section>
+
+    </main>
+    <!-- close main content -->
+
+    <%- include('../partials/footer'); %>
+
+  </body>
+</html>
+
+

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+
+  <body class="sans-serif w-100">
+
+    <%- include('../partials/header'); %>
+
+    <!-- open main content -->
+    <main class="w-100 bg-white black-70 center">
+
+    <div class="w-100 bb bt bg-near-white mt1">
+      <section class="mw8 mw10-ns center pa3 ph5-ns">
+        <h1 class="mv0">Southbridge Dev</h1>
+      </section>
+    </div>
+
+    <div id="app" />
+
+    </main>
+    <!-- close main content -->
+
+    <%- include('../partials/footer'); %>
+
+    <script src="/app.js"></script>
+    <script src="/vendor.js"></script>
+    <script>require('initialize');</script>
+
+  </body>
+</html>
