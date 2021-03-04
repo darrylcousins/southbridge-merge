@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan'); // http request logger
 const winston = require('./winston-config'); // logger
 const WebSocket = require('ws');
+const MongoClient = require('mongodb').MongoClient;
 const api = require("./api");
 
 global._logger = winston;
@@ -33,13 +34,45 @@ module.exports = function startServer(PORT, PATH, callback) {
 
   global._ws = wss;
 
-  // brunch compiled static files
-  app.use(express.static(path.join(__dirname, PATH)));
+  // create mongo client connection
+  let dbClient;
+  let boxCollection;
+  const mongo_uri = 'mongodb://localhost';
+
+  // assign the client from MongoClient
+  MongoClient
+    .connect(mongo_uri, { useNewUrlParser: true, poolSize: 10, useUnifiedTopology: true })
+    .then(client => {
+      const db = client.db('southbridge');
+      dbClient = client;
+      const productCollection = db.collection('products');
+      const boxCollection = db.collection('boxes');
+      const containerCollection = db.collection('containers');
+
+      // make collection available globally
+      app.locals.boxCollection = boxCollection;
+      app.locals.productCollection = productCollection;
+      app.locals.containerCollection = containerCollection;
+
+      // listen for the signal interruption (ctrl-c)
+      process.on('SIGINT', () => {
+        console.log('\nclosing dbClient');
+        dbClient.close();
+        process.exit();
+      });
+
+    })
+    .catch(error => console.error(error));
 
   app.use(bodyParser.urlencoded({ extended: true }));
 
   // logging
   app.use(morgan('dev', { stream: winston.stream })); // simple
+
+  app.use('/api', api.routes);
+
+  // brunch compiled static files
+  app.use(express.static(path.join(__dirname, PATH)));
 
   // templating
   app.set('view engine', 'ejs');
@@ -57,7 +90,6 @@ module.exports = function startServer(PORT, PATH, callback) {
     )
   };
 
-  app.use('/api', api.routes);
   app.get('/', useCrank);
 
   // render 404 page

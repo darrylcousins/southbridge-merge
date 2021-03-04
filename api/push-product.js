@@ -35,7 +35,8 @@ const pushProduct = async ({shop, path, product}) => {
       // here we could create the id map between shops so as to use boxes on dev site
       // cancel that, what I'll do is use the sync boxes code and store boxes in a test database
       if (json.product) {
-        _logger.info(JSON.stringify(json.product, null, 2));
+        //_logger.info(JSON.stringify(json.product, null, 2));
+        return json.product;
       } else {
         _logger.info(JSON.stringify(json, null, 2));
         return false;

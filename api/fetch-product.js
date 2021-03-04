@@ -31,7 +31,7 @@ const fetchProduct = async ({shop, path, send}) => {
     .then(json => {
       if (json.product) {
         if (send) sendProduct(json.product);
-        const {title, body_html, vendor, product_type, status, image, variants} = json.product;
+        const {title, handle, body_html, vendor, product_type, status, image, variants} = json.product;
         const {option1, price, inventory_management, inventory_policy} = variants[0];
         let {sku} = variants[0];
         let images;
@@ -41,7 +41,10 @@ const fetchProduct = async ({shop, path, send}) => {
           product: {
             title, body_html, vendor, product_type, status, images,
             variants: [{option1, price, sku, inventory_management, inventory_policy, inventory_quantity: "1000"}],
-            collection: { title, id: json.product.id, variant_id: variants[0].id} 
+            collection: { 
+              shopify_title: title,
+              shopify_product_id: json.product.id,
+              shopify_variant_id: variants[0].id} 
           }
         };
       } else {

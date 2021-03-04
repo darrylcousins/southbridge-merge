@@ -15,6 +15,7 @@ const makeShopQuery = async ({shop, path, limit, query, fields}) => {
   const count = limit ? `&limit=${limit}` : "";
   
   const url = `https://${_env[shop_name]}.myshopify.com/admin/api/${_env.API_VERSION}/${path}${fieldString}${searchString}${count}`;
+  _logger.info(url);
   return await fetch(url, {
     method: 'GET',
     headers: {
